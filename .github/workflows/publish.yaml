@@ -14,11 +14,11 @@ jobs:
 
     - name: Set version
       run: |
-        export VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
-        echo "My version=$VERSION"
+        echo ::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
+        echo "My version in first step is ={{ env.VERSION }}"
     
     - name: Print version
-      run: echo "My version in second step is $VERSION"
+      run: echo "My version in second step is {{ env.VERSION }}"
     # - name: Build and push
     #   run: |
     # 	gem install bundler
