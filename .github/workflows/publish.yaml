@@ -13,7 +13,7 @@ jobs:
         ruby-version: 2.6.x
 
     - name: Set version
-      run: echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
+      run: export VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
     
     - name: Print version
       run: echo {{ env.VERSION }}
