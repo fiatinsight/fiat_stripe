@@ -9,25 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
+    # Sets the runner to Ruby 2.6
     - uses: actions/checkout@v2
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
     
+    # Build the gem locally to the runner working directory
     - name: Build locally
-      description: 'Build the gem locally to the runner working directory'
       run: |
         gem build fiat_stripe.gemspec
-        
+    
+    # Credential file is used to authenticate to GitHub Packages
     - name: Create credential file 
-      description: 'Credential file is used to authenticate to GitHub Packages'
       run: |
         mkdir ~/.gem
         echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
         chmod 600 ~/.gem/credentials
 
+    # Pushes the previously-built gem to GitHub Packages
     - name: Publish to GitHub Packaages
-      description: 'Pushes the previously-built gem to GitHub Packages'
       run: |
         gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
