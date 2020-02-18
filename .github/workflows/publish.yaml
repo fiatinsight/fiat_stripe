@@ -16,7 +16,6 @@ jobs:
         ruby-version: 2.6.x
     
     - name: Build locally
-      uses: 
       run: gem build fiat_stripe.gemspec
         # gem install bundler
         # bundle install
