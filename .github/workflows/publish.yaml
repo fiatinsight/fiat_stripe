@@ -16,11 +16,10 @@ jobs:
         ruby-version: 2.6.x
     
     - name: Build locally
-      run: |
-        gem install bundler
-        bundle install
-        gem build fiat_sripe.gemspec
-    
+      run: gem build fiat_sripe.gemspec
+        # gem install bundler
+        # bundle install
+        
     - name: Create credential file
       run: |
         echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
