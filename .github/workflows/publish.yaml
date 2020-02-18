@@ -3,28 +3,28 @@ on: [push]
 
 jobs:
   build:
-	runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-	steps:
-	- uses: actions/checkout@v2
-	- name: Set up Ruby 2.6
-	  uses: actions/setup-ruby@v1
-	  with:
-		ruby-version: 2.6.x
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.x
 
-	- name: Set version
-	  run: echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
-	
-	- name: Print version
-	  run: echo {{ env.VERSION }}
-	# - name: Build and push
-	#   run: |
-	# 	gem install bundler
-	# 	bundle install 
-	# 	export VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
-	# #   echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
-	# 	gem build fiat_stripe.gemspec
-	# 	gem push 
+    - name: Set version
+      run: echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
+    
+    - name: Print version
+      run: echo {{ env.VERSION }}
+    # - name: Build and push
+    #   run: |
+    # 	gem install bundler
+    # 	bundle install 
+    # 	export VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
+    # #   echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
+    # 	gem build fiat_stripe.gemspec
+    # 	gem push 
 
 
 ## environment variables
