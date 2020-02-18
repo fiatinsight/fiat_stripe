@@ -27,8 +27,4 @@ jobs:
 
     - name: Publish to packages
       run: |
-    	gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_sripe-{{ env.VERSION }}.gem
-
-
-## environment variables
-## secrets
+        gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_sripe-{{ env.VERSION }}.gem
