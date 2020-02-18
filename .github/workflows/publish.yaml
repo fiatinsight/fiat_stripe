@@ -22,7 +22,8 @@ jobs:
         
     - name: Create credential file
       run: |
-        echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" > ~/.gem/credentials
+        touch ~/.gem/credentials
+        echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
 
     - name: Publish to packages
       run: |
