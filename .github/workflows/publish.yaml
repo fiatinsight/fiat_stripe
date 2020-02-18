@@ -16,7 +16,8 @@ jobs:
         ruby-version: 2.6.x
     
     - name: Build locally
-      run: gem build fiat_sripe.gemspec
+      uses: 
+      run: gem build fiat_stripe.gemspec
         # gem install bundler
         # bundle install
         
@@ -26,4 +27,4 @@ jobs:
 
     - name: Publish to packages
       run: |
-        gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_sripe-{{ env.VERSION }}.gem
+        gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-{{ env.VERSION }}.gem
