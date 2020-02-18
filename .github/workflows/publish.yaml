@@ -2,7 +2,7 @@ name: PublishToGHPackages
 on: [push]
 
 env:
-  version: $(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
+  VERSION: $(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
 
 jobs:
   build:
@@ -14,21 +14,20 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
-
-    - name: Set version
-      run: |
-        echo "My version in first step is = ${{ env.version }}"
     
-    - name: Print version
-      run: echo "My version in second step is ${{ env.version }}"
-    # - name: Build and push
-    #   run: |
-    # 	gem install bundler
-    # 	bundle install 
-    # 	export VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")
-    # #   echo "::set-env VERSION=$(ruby -r ./lib/fiat_stripe/version.rb -e "print(FiatStripe::VERSION)")"
-    # 	gem build fiat_stripe.gemspec
-    # 	gem push 
+    - name: Build locally
+      run: |
+        gem install bundler
+        bundle install
+        gem build fiat_sripe.gemspec
+    
+    - name: Create credential file
+      run: |
+        echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
+
+    - name: Publish to packages
+      run: |
+    	gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_sripe-{{ env.VERSION }}.gem
 
 
 ## environment variables
