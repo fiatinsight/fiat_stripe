@@ -16,16 +16,18 @@ jobs:
         ruby-version: 2.6.x
     
     - name: Build locally
-      run: gem build fiat_stripe.gemspec
-        # gem install bundler
-        # bundle install
+      description: 'Build the gem locally to the runner working directory'
+      run: |
+        gem build fiat_stripe.gemspec
         
-    - name: Create credential file
+    - name: Create credential file 
+      description: 'Credential file is used to authenticate to GitHub Packages'
       run: |
         mkdir ~/.gem
         echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
         chmod 600 ~/.gem/credentials
 
-    - name: Publish to packages
+    - name: Publish to GitHub Packaages
+      description: 'Pushes the previously-built gem to GitHub Packages'
       run: |
         gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
