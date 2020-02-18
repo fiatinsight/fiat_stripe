@@ -17,10 +17,10 @@ jobs:
 
     - name: Set version
       run: |
-        echo "My version in first step is = ${{ env.VERSION }}"
+        echo "My version in first step is = ${{ env.version }}"
     
     - name: Print version
-      run: echo "My version in second step is ${{ env.VERSION }}"
+      run: echo "My version in second step is ${{ env.version }}"
     # - name: Build and push
     #   run: |
     # 	gem install bundler
