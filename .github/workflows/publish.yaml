@@ -40,9 +40,9 @@ jobs:
     # Credential file is used to authenticate to GitHub Packages
     - name: Create credential file 
       run: |
-        if [ ! -d "~/.gem" ]; then
-          mkdir ~/.gem
-        fi
+        # if [ ! -d "~/.gem" ]; then
+        #   mkdir ~/.gem
+        # fi
         echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
         chmod 600 ~/.gem/credentials
 
