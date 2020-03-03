@@ -49,4 +49,4 @@ jobs:
     # Pushes the previously-built gem to GitHub Packages
     - name: Publish to GitHub Packaages
       run: |
-        gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
+        gem push --force --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
