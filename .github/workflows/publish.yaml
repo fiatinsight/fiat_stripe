@@ -23,6 +23,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
     
+    - name: Install SQLite
+      run: apt-get install libsqlite3-dev
+    
     - name: Bundle Install
       run: |
         gem install bundler
