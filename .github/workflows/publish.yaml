@@ -7,15 +7,26 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    
     # Sets the runner to Ruby 2.6
     - uses: actions/checkout@v2
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
+    
+    # Create cache layer
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+    
+    - name: Bundle Install
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
     
     # Build the gem locally to the runner working directory
     - name: Build locally
