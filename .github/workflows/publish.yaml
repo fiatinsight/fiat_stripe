@@ -26,17 +26,14 @@ jobs:
     - name: Install SQLite
       run: sudo apt-get install libsqlite3-dev
     
-    - name: Bundle Install
+    - name: Bundle install and test
       run: |
         gem install bundler
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
-    
-    - name: Test
-      run: rake test
+        rake test
 
-    # Build the gem locally to the runner working directory
-    - name: Build locally
+    - name: Build gem locally
       run: |
         gem build fiat_stripe.gemspec
     
