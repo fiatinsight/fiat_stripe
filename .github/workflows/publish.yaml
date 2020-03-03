@@ -32,6 +32,9 @@ jobs:
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
     
+    - name: Test
+      run: rake test
+
     # Build the gem locally to the runner working directory
     - name: Build locally
       run: |
@@ -40,13 +43,10 @@ jobs:
     # Credential file is used to authenticate to GitHub Packages
     - name: Create credential file 
       run: |
-        # if [ ! -d "~/.gem" ]; then
-        #   mkdir ~/.gem
-        # fi
         echo ":github: Bearer ${{ secrets.GITHUB_TOKEN }}" >> ~/.gem/credentials
         chmod 600 ~/.gem/credentials
 
     # Pushes the previously-built gem to GitHub Packages
     - name: Publish to GitHub Packaages
       run: |
-        gem push --force --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
+        gem push --key github --host https://rubygems.pkg.github.com/fiatinsight fiat_stripe-${{ env.VERSION }}.gem
