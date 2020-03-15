@@ -26,7 +26,9 @@ jobs:
           ${{ runner.os }}-gems-
     
     - name: Install SQLite
-      run: sudo apt-get install libsqlite3-dev
+      run: |
+        sudo apt-get update --fix-missing
+        sudo apt-get install libsqlite3-dev
     
     - name: Bundle install
       run: |
