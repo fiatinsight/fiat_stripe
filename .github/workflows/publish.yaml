@@ -35,7 +35,7 @@ jobs:
         GN=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')
         echo "::set-env name=GEM_NAME::${GN}"
         GHO=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $1}')
-        echo "::set-env name=GH_ORG::${GHO}"
+        echo "::set-env name=GH_ORG::${GHO}" 
     
     # Configurating aws cli
     - name: Configure AWS Credentials
@@ -63,16 +63,18 @@ jobs:
         bundle install --jobs 4 --retry 3
     
     # Specifying same bundle path as was previously cached 
-    - name: Test
+    - name: Run tests
       run: |
         bundle config path vendor/bundle
         bundle exec rails test -v
-
+    
+    # Increments the current version variable at the scale provided
     - name: Set new version environment variable
       run: |
         NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
         echo "::set-env name=NEW_VERSION::$NEW_VERSION"
-
+    
+    # Locally build the gemfile
     - name: Build gem locally
       run: |
         sudo mv $GEM_NAME.gemspec.original $GEM_NAME.gemspec
