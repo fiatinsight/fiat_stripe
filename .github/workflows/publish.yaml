@@ -36,7 +36,8 @@ jobs:
         echo "::set-env name=GEM_NAME::${GN}"
         GHO=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $1}')
         echo "::set-env name=GH_ORG::${GHO}"
-
+    
+    # Configurating aws cli
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
