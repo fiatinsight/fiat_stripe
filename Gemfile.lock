@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fiat_stripe (0.1.6.1)
+    fiat_stripe (0.1.6.3)
       rails (~> 5.2.1)
       stripe
       stripe_event
@@ -59,6 +59,7 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    json (2.3.0)
     loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -127,6 +128,7 @@ PLATFORMS
 
 DEPENDENCIES
   fiat_stripe!
+  json
   sqlite3
 
 BUNDLED WITH

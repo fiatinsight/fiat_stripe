@@ -5,8 +5,8 @@ require "fiat_stripe/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "fiat_stripe"
-  s.version     = FiatStripe::VERSION
+  s.name        = GHA_REPLACE_GEM_NAME
+  s.version     = GHA_REPLACE_VERSION
   s.authors     = ["Andrew Haines"]
   s.email       = ["andrew@fiatinsight.com"]
   s.summary       = "Fiat Insight handling for Stripe"
