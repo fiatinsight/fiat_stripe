@@ -45,7 +45,7 @@ jobs:
     - name: Set gem name and current version
       run: |
         cp $GEM_NAME.gemspec $GEM_NAME.gemspec.original
-        DYNAMO_VERSION=$(aws dynamodb get-item --table-name $DYNAMO_TABLE_NAME --key '{"packageName":{"S":"${GEM_VERSION}"}}' --projection-expression "currentVersion" | jq -r '.Item.currentVersion.S')
+        DYNAMO_VERSION=$(aws dynamodb get-item --table-name $DYNAMO_TABLE_NAME --key '{"packageName":{"S":"${GEM_NAME}"}}' --projection-expression "currentVersion" | jq -r '.Item.currentVersion.S')
         CURRENT_VERSION=${DYNAMO_VERSION:-0.0.2} 
         echo "::set-env name=CURRENT_VERSION::${CURRENT_VERSION}"
         sed -i "s|GHA_REPLACE_GEM_NAME|\"${GEM_NAME}\"|g" "$GEM_NAME.gemspec"
