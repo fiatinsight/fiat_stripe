@@ -86,6 +86,7 @@ jobs:
       run: |
         gem push --key github --host https://rubygems.pkg.github.com/$GH_ORG $GEM_NAME-$NEW_VERSION.gem
     
+    # DynamoDB will store all dependencies by packageName
     - name: Push package list to Dynamodb
       run: |
         GEMS=$(bundle exec rails r "puts Bundler.load.specs.map{|s| {\"#{s.name}\":{\"S\":\"#{s.version}\"}}}.reduce(:merge).to_json")
