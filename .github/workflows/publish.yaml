@@ -23,11 +23,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
     
+    # Bundler dependency (we think?)
     - name: Install SQLite
       run: |
         sudo apt-get update --fix-missing
         sudo apt-get install libsqlite3-dev
     
+    # Setting environment variables here when calculated and used in other steps    
     - name: Set calculated environment variables
       run: |
         GN=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')
