@@ -71,8 +71,8 @@ jobs:
     - name: Build gem locally
       run: |
         sudo mv $GEM_NAME.gemspec.original $GEM_NAME.gemspec
-        sed -i s|GHA_REPLACE_VERSION|\"${NEW_VERSION}\"|g" "$GEM_NAME.gemspec"
-        sed -i s|GHA_REPLACE_GEM_NAME|\"${GEM_NAME}\"|g" "$GEM_NAME.gemspec"
+        sed -i "s|GHA_REPLACE_VERSION|\"${NEW_VERSION}\"|g" "$GEM_NAME.gemspec"
+        sed -i "s|GHA_REPLACE_GEM_NAME|\"${GEM_NAME}\"|g" "$GEM_NAME.gemspec"
         gem build $GEM_NAME.gemspec
     
     # Credential file is used to authenticate to GitHub Packages
