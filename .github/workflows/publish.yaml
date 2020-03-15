@@ -45,6 +45,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.DD_AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
     
+    # Getting current version from DynamoDB, setting to 0.0.1 if not previously set
     - name: Set gem name and current version
       run: |
         cp $GEM_NAME.gemspec $GEM_NAME.gemspec.original
