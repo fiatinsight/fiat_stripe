@@ -46,7 +46,7 @@ jobs:
       run: |
         cp $GEM_NAME.gemspec $GEM_NAME.gemspec.original
         DYNAMO_VERSION=$(aws dynamodb get-item --table-name $DYNAMO_TABLE_NAME --key '{"packageName":{"S":"${GEM_NAME}"}}' --projection-expression "currentVersion" | jq -r '.Item.currentVersion.S')
-        CURRENT_VERSION=${DYNAMO_VERSION:-0.0.2} 
+        CURRENT_VERSION=${DYNAMO_VERSION:-0.0.1} 
         echo "::set-env name=CURRENT_VERSION::${CURRENT_VERSION}"
         sed -i "s|GHA_REPLACE_GEM_NAME|\"${GEM_NAME}\"|g" "$GEM_NAME.gemspec"
         sed -i "s|GHA_REPLACE_VERSION|\"${CURRENT_VERSION}\"|g" "$GEM_NAME.gemspec"
@@ -65,7 +65,7 @@ jobs:
 
     - name: Set new version environment variable
       run: |
-        if [ $CURRENT_VERSION = "0.0.2" ]; then NEW_VERSION=$CURRENT_VERSION; else NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}'); fi
+        if [ $CURRENT_VERSION = "0.0.1" ]; then NEW_VERSION=$CURRENT_VERSION; else NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}'); fi
         echo "::set-env name=NEW_VERSION::$NEW_VERSION"
 
     - name: Build gem locally
