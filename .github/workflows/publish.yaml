@@ -30,6 +30,14 @@ jobs:
         sudo apt-get update --fix-missing
         sudo apt-get install libsqlite3-dev
     
+    - name: Set gem name and current version
+      run: |
+        cp $GEM_NAME.gemspec $GEM_NAME.gemspec.original
+        DYNAMO_VERSION=$(aws dynamodb get-item --table-name $DYNAMO_TABLE_NAME --key '{"packageName":{"S":"${GEM_VERSION}"}}' --projection-expression "currentVersion" | jq -r '.Item.currentVersion.S')
+        echo "::set-env name=CURRENT_VERSION::${DYNAMO_VERSION:-0.1.0}"
+        sed -i 's/GHA_REPLACE_GEM_NAME/$GEM_NAME/g' $GEM_NAME.gemspec
+        sed -i 's/GHA_REPLACE_VERSION/$CURRENT_VERSION/g' $GEM_NAME.gemspec
+    
     - name: Bundle install
       run: |
         gem install bundler
@@ -51,14 +59,13 @@ jobs:
 
     - name: Set new version environment variable
       run: |
-        DYNAMO_VERSION=$(aws dynamodb get-item --table-name $DYNAMO_TABLE_NAME --key '{"packageName":{"S":"${GEM_VERSION}"}}' --projection-expression "currentVersion" | jq -r '.Item.currentVersion.S')
-        CURRENT_VERSION=${DYNAMO_VERSION:-0.1.0} 
         if [ $CURRENT_VERSION = "0.1.0" ]; then NEW_VERSION=$CURRENT_VERSION; else NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}'); fi
-        echo "::set-env name=VERSION::$NEW_VERSION"
+        echo "::set-env name=NEW_VERSION::$NEW_VERSION"
 
     - name: Build gem locally
       run: |
-        sed -i 's/GHA_REPLACE_VERSION/$VERSION/g' $GEM_NAME.gemspec
+        sudo mv $GEM_NAME.gemspec.original $GEM_NAME.gemspec
+        sed -i 's/GHA_REPLACE_VERSION/$NEW_VERSION/g' $GEM_NAME.gemspec
         sed -i 's/GHA_REPLACE_GEM_NAME/$GEM_NAME/g' $GEM_NAME.gemspec
         gem build $GEM_NAME.gemspec
     
@@ -71,15 +78,15 @@ jobs:
     # Pushes the previously-built gem to GitHub Packages
     - name: Publish to GitHub Packaages
       run: |
-        gem push --key github --host https://rubygems.pkg.github.com/$GH_ORG $GEM_NAME-$VERSION.gem
+        gem push --key github --host https://rubygems.pkg.github.com/$GH_ORG $GEM_NAME-$NEW_VERSION.gem
     
     - name: Push package list to Dynamodb
       run: |
         GEMS=$(rails r "puts Bundler.load.specs.map{|s| {\"#{s.name}\":{\"S\":\"#{s.version}\"}}}.reduce(:merge).to_json")
         jq -n \
-          --arg PACKAGE_NAME "$GEM_NAME" \
-          --arg VERSION "$VERSION" \
+          --arg GEM_NAME "$GEM_NAME" \
+          --arg NEW_VERSION "$NEW_VERSION" \
           --argjson GEMS "$GEMS" \
-          '{"packageName": {"S": $PACKAGE_NAME}, "currentVersion": {"S": $VERSION}, gems: {"M": $GEMS}}' \
+          '{"packageName": {"S": $GEM_NAME}, "currentVersion": {"S": $NEW_VERSION}, gems: {"M": $GEMS}}' \
           > packages.json
         aws dynamodb put-item --table-name $DYNAMO_TABLE_NAME --item file://packages.json
