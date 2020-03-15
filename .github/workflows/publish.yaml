@@ -2,9 +2,7 @@ name: PublishToGHPackages
 on: [push]
 
 env:
-  GEM_NAME: $(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')
   DYNAMO_TABLE_NAME: ${{ secrets.DYNAMO_TABLE_NAME }}
-  GH_ORG: $(echo $GITHUB_REPOSITORY | awk -F'/' '{print $1}')
 
 jobs:
   build:
@@ -29,6 +27,13 @@ jobs:
       run: |
         sudo apt-get update --fix-missing
         sudo apt-get install libsqlite3-dev
+    
+    - name: Set calculated environment variables
+      run: |
+        GN=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')
+        echo "::set-env name=GEM_NAME::${GN}"
+        GHO=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $1}')
+        echo "::set-env name=GH_ORG::${GHO}"
     
     - name: Set gem name and current version
       run: |
